@@ -8,11 +8,11 @@ public class Pattern12 {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter number to print pattern");
         int n = Integer.parseInt(sc.next());
-        //Pattern12.pattern(n);
+        Pattern12.pattern2(n);
 
 
-        int count = (int)(Math.log10(8)) + 1;
-        System.out.println(count);
+       // int count = (int)(Math.log10(8)) + 1;
+        //System.out.println(count);
     }
 
     public static void pattern(int n) {
