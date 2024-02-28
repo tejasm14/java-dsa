@@ -1,5 +1,8 @@
 package com.shaft.itextservice.java8;
 
+import java.util.function.DoubleConsumer;
+import java.util.function.DoubleFunction;
+
 interface Parser {
     String parse(String s);
 }
@@ -33,6 +36,10 @@ public class TestMethodReference {
 
     public static void main(String[] args) {
 
+        DoubleFunction<Double> sqrt = Math::sqrt;
+
+        System.out.println(sqrt);
+
         String str = "Tejas Mohite";
         MyPrinter myPrinter = new MyPrinter();
         /*myPrinter.print(str, new Parser() {
@@ -41,7 +48,11 @@ public class TestMethodReference {
                 return StringParser.convert(s);
             }
         });*/
-        myPrinter.print(str, (s -> StringParser.convert(s)));
+        myPrinter.print(str, (StringParser::convert));
     }
+
+
+
+
 
 }
