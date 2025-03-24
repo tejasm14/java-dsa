@@ -7,29 +7,36 @@ import com.opencsv.CSVWriter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+///utility.
 public class MdmExcelToCsv {
 
     public static void main(String[] args) {
-        String excelFilePath = "D:\\TEJAS MOHITE\\Projects-06-06-2022\\vijay-sales-project-files-05-04-2024\\Vijay-Sales-Product-Specification-files-06-08-2024\\New folder - amaan\\ProductSpecifications-Chargers_Data_03-Aug-2024.xlsx"; // Change this to your Excel file path
-        String csvFilePath = "D:\\TEJAS MOHITE\\Projects-06-06-2022\\vijay-sales-project-files-05-04-2024\\Vijay-Sales-Product-Specification-files-06-08-2024\\New folder - amaan\\test\\" + System.currentTimeMillis() + ".csv";   // Change this to your desired CSV file path
+        /*String excelFilePath = "D:\\TEJAS MOHITE\\Projects-06-06-2022\\vijay-sales-project-files-05-04-2024\\Vijay-Sales-Prod-Spec-Files-23-08-2024\\Format Change\\Specs in XLS\\TABLETS.xlsx"; // Change this to your Excel file path
+        String csvFilePath = "D:\\TEJAS MOHITE\\Projects-06-06-2022\\vijay-sales-project-files-05-04-2024\\Vijay-Sales-Prod-Spec-Files-23-08-2024\\Format Change\\Specs in XLS\\test\\" + System.currentTimeMillis() + ".csv";   // Change this to your desired CSV file path*/
+
+        String excelFilePath = "C:\\Users\\tejas.mohite\\Downloads\\ProductSpecifications-OTG_Flashdrive_Data_03-Aug-2024.xlsx";  // Change this to your Excel file path
+        String csvFilePath = "C:\\Users\\tejas.mohite\\Downloads\\csv\\" + System.currentTimeMillis() + ".csv";   // Change this to your desired CSV file path
 
         try (FileInputStream excelFile = new FileInputStream(excelFilePath);
              Workbook workbook = new XSSFWorkbook(excelFile);
-             FileWriter csvFile = new FileWriter(csvFilePath);
-             CSVWriter csvWriter = new CSVWriter(csvFile)) {
+             OutputStreamWriter writer = new OutputStreamWriter(Files.newOutputStream(Paths.get(csvFilePath)), StandardCharsets.UTF_8);
+             CSVWriter csvWriter = new CSVWriter(writer)) {
 
             //Sheet sheet = workbook.getSheet("Tech Specs");
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
+
+            SimpleDateFormat dateFormat1 = new SimpleDateFormat("MMM-yyyy"); // Format for "Oct-2022"
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd-MMM-yyyy"); // Format for "22-Oct-2021"
+
 
             while (rowIterator.hasNext()) {
                 //Row row = rowIterator.next();
@@ -47,11 +54,18 @@ public class MdmExcelToCsv {
                         Cell cell = row.getCell(cellIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                         switch (cell.getCellType()) {
                             case STRING:
-                                csvData[cellIndex] = cell.getStringCellValue();
+                                String cellValue = cell.getStringCellValue();
+                                if (isDateFormattedString(cellValue)) {
+                                    // Parse string formatted date
+                                    csvData[cellIndex] = parseDateFromString(cellValue, dateFormat2);
+                                } else {
+                                    csvData[cellIndex] = cellValue;
+                                }
                                 break;
                             case NUMERIC:
                                 if (DateUtil.isCellDateFormatted(cell)) {
-                                    csvData[cellIndex] = cell.getDateCellValue().toString();
+                                    // Format numeric date cells
+                                    csvData[cellIndex] = dateFormat1.format(cell.getDateCellValue());
                                 } else {
                                     csvData[cellIndex] = String.valueOf(cell.getNumericCellValue());
                                 }
@@ -104,9 +118,11 @@ public class MdmExcelToCsv {
                 });
             });
 
-            CSVWriter writer = new CSVWriter(new FileWriter("C:\\Users\\tejas.mohite\\Downloads\\files-prod-spec\\output2.csv"));
-            writer.writeAll(dataList);
-            writer.close();
+
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(Files.newOutputStream(Paths.get("C:\\Users\\tejas.mohite\\Downloads\\csv\\output2.csv")), StandardCharsets.UTF_8);
+            CSVWriter csvWriter1 = new CSVWriter(outputStreamWriter);
+            csvWriter1.writeAll(dataList);
+            csvWriter1.close();
             System.out.println("CSV file generated..");
 
         } catch (IOException e) {
@@ -154,6 +170,22 @@ public class MdmExcelToCsv {
         }
         return csvJsonArr;
     }
+
+    private static boolean isDateFormattedString(String cellValue) {
+        // Check if the string matches a date format pattern
+        return cellValue.matches("\\d{2}-[a-zA-Z]{3}-\\d{4}"); // e.g., "22-Oct-2021"
+    }
+
+    private static String parseDateFromString(String dateStr, SimpleDateFormat dateFormat) {
+        try {
+            Date date = dateFormat.parse(dateStr);
+            return dateFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return dateStr; // Fallback to original string if parsing fails
+        }
+    }
+
 
 
 }

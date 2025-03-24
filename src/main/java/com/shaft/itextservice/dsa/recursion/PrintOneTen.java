@@ -7,11 +7,7 @@ public class PrintOneTen {
     }
 
     public static void printNumber(int num) {
-
         int count = 0;
-        if (count == num) {
-            return;
-        }
         count = count + 1;
         print(count);
         printNumber(count);

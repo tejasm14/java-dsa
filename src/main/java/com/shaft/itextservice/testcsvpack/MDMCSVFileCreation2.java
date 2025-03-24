@@ -8,6 +8,7 @@ import com.opencsv.CSVWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,8 @@ public class MDMCSVFileCreation2 {
     public static void main(String[] args) {
         //iphone - Tech Specs
         try {
-            String filePath = "D:\\TEJAS MOHITE\\Projects-06-06-2022\\vijay-sales-project-files-05-04-2024\\Vijay-Sales-Product-Specification-files-06-08-2024\\output-csv-files\\1723811969393.csv";
+            //String filePath = "D:\\TEJAS MOHITE\\Projects-06-06-2022\\vijay-sales-project-files-05-04-2024\\Vijay-Sales-Product-Specification-files-06-08-2024\\output-csv-files\\1723811969393.csv";
+            String filePath = "C:\\Users\\tejas.mohite\\Downloads\\iPhone Specs Checked File.csv";
 //            //String filePath = "D:\\TEJAS MOHITE\\Projects-06-06-2022\\vijay-sales-project-files-05-04-2024" +
 //                    "\\csvutility-files\\all-product-specification-files\\excel-files\\allcategories" +
 //                    "\\csv\\output1718709858630.csv";
