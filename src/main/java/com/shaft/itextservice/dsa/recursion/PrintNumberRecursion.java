@@ -3,15 +3,17 @@ package com.shaft.itextservice.dsa.recursion;
 public class PrintNumberRecursion {
 
     public static void main(String[] args) {
-        printNumber(1);
+        int ans = printNumber(1);
+        System.out.println(ans);
     }
 
-    public static void printNumber(int num) {
-        System.out.println(num);
+    public static int  printNumber(int num) {
+
         if (num == 5) {
-            return;
+            return num;
         }
-        printNumber(num + 1);
+        System.out.println(num);
+        return printNumber(num + 1);
     }
 
 

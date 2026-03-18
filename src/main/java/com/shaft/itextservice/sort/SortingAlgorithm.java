@@ -9,8 +9,8 @@ public class SortingAlgorithm {
         for (int a :arr) {
             System.out.print(a+" ");
         }*/
-        //selection(arr);
-        insertion(arr);
+        selection(arr);
+        //insertion(arr);
         System.out.println("insertion sort");
         for (int n:arr) {
             System.out.print(n+" ");
